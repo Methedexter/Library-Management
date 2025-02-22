@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management - View Books</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Library System</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="add-book.html">Add Book</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="view-books.html">View Books</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">Book Collection</div>
+            <div class="card-body book-list">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>ISBN</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="library.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const library = new Library();
+            const exampleBooks = [
+                new Book('The Great Gatsby', 'F. Scott Fitzgerald', '978-0743273565'),
+                new Book('To Kill a Mockingbird', 'Harper Lee', '978-0446310789'),
+                new Book('1984', 'George Orwell', '978-0451524935')
+            ];
+
+            if (library.getBooks().length === 0) {
+                exampleBooks.forEach(book => library.addBook(book));
+            }
+            UI.displayBooks();
+        });
+
+        function editBook(isbn) {
+            UI.showAlert('Editing not implemented here. Add functionality in Add Book page.', 'warning');
+        }
+
+        function deleteBook(isbn) {
+            const library = new Library();
+            library.removeBook(isbn);
+            UI.displayBooks();
+            UI.showAlert('Book Deleted Successfully!', 'danger');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/login.css">
+</head>
+<body>
+    <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <div class="card p-4" id="loginCard">
+            <div class="d-flex justify-content-center gap-2">
+                <img src="https://kmit.in/images/kmit-bar.png" alt="kmit" style="height: 3em">
+                <p class="logoText text-center fs-2">Library Management</p>
+            </div>
+            <form action="" id="loginForm">
+                <label for="username" class="form-label">Login Id :</label>
+                <input type="text" class="form-control" name="username" id="username">
+                <label for="password" class="form-label">Password : </label>
+                <input type="password" name="password" id="password" class="form-control">
+                <div id="wrongPassword" style="color: red;"></div>
+                <button type="submit" class="btn btn-primary form-control mt-4">Login</button>
+            </form>
+        </div>
+    </div>
+    <canvas id="particleCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById("particleCanvas");
+        const ctx = canvas.getContext("2d");
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        let particles = [];
+        const numParticles = 100;
+        
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = (Math.random() - 0.5) * 2;
+                this.radius = 2;
+            }
+            
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                if (this.x <= 0 || this.x >= canvas.width) this.vx *= -1;
+                if (this.y <= 0 || this.y >= canvas.height) this.vy *= -1;
+            }
+            
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = "white";
+                ctx.fill();
+                ctx.closePath();
+            }
+        }
+        
+        function initParticles() {
+            for (let i = 0; i < numParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+        
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x;
+                    let dy = particles[i].y - particles[j].y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                        ctx.closePath();
+                    }
+                }
+            }
+        }
+        
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            connectParticles();
+            requestAnimationFrame(animate);
+        }
+        
+        window.addEventListener("resize", () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            initParticles();
+        });
+        
+        initParticles();
+        animate();
+    </script>
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+        
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+        
+            const response = await fetch("http://localhost:3000/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ username, password }),
+            });
+            const result = await response.json();
+            if (result.success) {
+                window.location.href = result.redirect;
+            } else {
+                document.getElementById("wrongPassword").innerText = result.message;
+            }
+        });
+        </script>
+        
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

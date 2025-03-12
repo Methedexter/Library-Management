@@ -47,9 +47,9 @@ document.getElementById("borrowedBooks").addEventListener('click', (e) => {
                         setTimeout(function() {
                         responseDiv.style.display = 'none';
                         }, 2000);
+                        document.getElementById("borrowedBooks").click()
                     })
                     .catch(() => alert('Error processing your request'));
-                    document.getElementById("borrowedBooks").click()
                 });
             });
         }

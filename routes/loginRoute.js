@@ -8,8 +8,9 @@ const session = require("express-session");
 app.use(express.json())
 app.use(express.urlencoded({extended : true}));
 
+const secret_key = process.env.SECRET_KEY || "your secret key"
 app.use(session({
-    secret: process.env.SECRET_KEY || "your secret key",
+    secret: secret_key,
     resave: false,
     saveUninitialized: true
 }));

@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", (e) => {
             renderBooks(data);
         }
         else {
-            noBooksfound();
+            noBooksfound(data.message);
         }
     })
     .catch(() => console.log("Error"));

@@ -4,7 +4,7 @@ const path = require("path");
 
 const loginPage = (req, res) => {
     if (!req.session.user) {
-        return res.sendFile(path.join("C:\\Users\\reddy\\Downloads\\KMIT\\FFWD (1)\\LibManagement\\", "public", "login.html"));
+        return res.sendFile(path.join(__dirname,"../public", "login.html"));
     }
     if(req.session.user.role == "admin"){
         return res.redirect("/admin.html");
@@ -45,14 +45,14 @@ const user = (req, res) => {
     if (!req.session.user || req.session.user.role !== "user") {
         return res.redirect("/login.html");
     }
-    res.sendFile(path.join("C:\\Users\\reddy\\Downloads\\KMIT\\FFWD (1)\\LibManagement\\", "protected", "user.html"));
+    res.sendFile(path.join(__dirname, "../protected", "user.html"));
 }
 
 const admin = (req, res) => {
     if (!req.session.user || req.session.user.role !== "admin") {
         return res.redirect("/login.html");
     }
-    res.sendFile(path.join("C:\\Users\\reddy\\Downloads\\KMIT\\FFWD (1)\\LibManagement\\", "protected", "admin.html"));
+    res.sendFile(path.join(__dirname,"../protected", "admin.html"));
 }
 
 const logout = (req, res) => {
